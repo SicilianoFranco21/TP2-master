@@ -5,10 +5,11 @@ from geopy.geocoders import Nominatim
 from geopy import distance
 from msvcrt import getch
 import os
-
+import webbrowser
+import cv2
 
 #CONSTANTES
-API_TOKEN: str = 'Token 8e0fee00a18a82f4e672f4f1239252435727dbfe'
+API_TOKEN: str = 'Token 06314a64093e9225ccf62c5872988131c9c5909c'
 
 
 # CLEAR SCREEN
@@ -45,8 +46,14 @@ def obtener_direccion(coordenadas: str) -> tuple:
     return direccion, localidad, provincia
 
 
+def obtener_descripcion_audio(ruta_audio: str) -> str:
+    return "descripcion_audio"
+
+
 # Punto 1 del tp (COMPLETO)
 def leer_archivo() -> list[dict]:
+    cls()
+    print("\nPor favor, espere mientras se abre el archivo de infracciones...")
     infracciones: list = []
     with open('multas.csv', 'r') as archivo_csv:
         lector = csv.reader(archivo_csv, delimiter=',')
@@ -58,73 +65,44 @@ def leer_archivo() -> list[dict]:
             longitud: int = linea[3]
             ruta_foto: str = linea[4]
             descripcion: str = linea[5]
-            #ruta_audio: str = linea[6]
-
+            ruta_audio: str = linea[6]
+            coordenadas: str = latitud + "," + longitud
+            direccion, localidad, provincia = obtener_direccion(coordenadas)
+            patente: str = obtener_patente(ruta_foto)
+            descripcion_audio: str = obtener_descripcion_audio(ruta_audio)
+            
             informe = {
                 "timestamp": timestamp, 
                 "telefono": telefono, 
                 "latitud": latitud, 
                 "longitud": longitud,
                 "ruta_foto": ruta_foto,
-                "descripcion": descripcion
+                "descripcion_texto": descripcion,
+                "ruta_audio": ruta_audio,
+                "direccion": direccion,
+                "localidad": localidad,
+                "provincia": provincia,
+                "patente": patente,
+                "descripcion_audio": descripcion_audio
                     }
             infracciones.append(informe)
     return infracciones
 
 
 # Punto 2 del tp (COMPLETO) - Corresponde a opcion 1 del programa
-def crear_archivo(infracciones: list[dict]) -> list[dict]:
-    for infraccion in range(len(infracciones)):
-        timestamp: str = infracciones[infraccion]['timestamp']
-        telefono: str = infracciones[infraccion]['telefono']
-        latitud: int = infracciones[infraccion]['latitud']
-        longitud: int = infracciones[infraccion]['longitud']
-        ruta_foto: str = infracciones[infraccion]['ruta_foto']
-
-        #Agregamos patente al diccionario
-        patente: str = obtener_patente(ruta_foto)
-        infracciones[infraccion]['patente'] = patente
-        descripcion_texto: str = infracciones[infraccion]['descripcion']
-
-        #Agregamos coordenadas al diccionario
-        coordenadas: str = latitud + "," + longitud 
-        infracciones[infraccion]['coordenadas'] = coordenadas
-
-        #Agregamos ubicacion al diccionario
-        direccion, localidad, provincia = obtener_direccion(coordenadas)
-        infracciones[infraccion]['ubicacion'] = direccion, localidad, provincia
-        #descripcion_audio: str = obtener_texto_audio(infracciones[infraccion][6])
-    return infracciones
-
-
-
-def buscar_patente(patente:str, infracciones: list):
-    cerrar_funcion: bool = False
-    while not cerrar_funcion:
-        cls()
-        print("espere mientras se procesa la informacion...")
-        cls()
+def crear_archivo(infracciones: list[dict]):
+    # crear un archivo csv llamado "informe_infracciones.csv" con la siguiente informacion:
+    # timestamp, telefono, direccion, localidad, provincia, patente, descripcion_texto, descripcion_audio
+    with open("informe_infracciones.csv", "w", newline="") as archivo_csv:
+        writer = csv.writer(archivo_csv, delimiter=',')
+        writer.writerow(["timestamp", "telefono", "direccion", "localidad", "provincia", "patente", "descripcion_texto", "descripcion_audio"])
         for infraccion in infracciones:
-            if infraccion['patente'] == patente:
-                print(f'''
-    DATOS DE LA INFRACCION:
-    PATENTE: {infraccion['patente']}
-    FECHA: {infraccion['timestamp']}
-    UBICACION: {infraccion['ubicacion']}
-    DESCRIPCION: {infraccion['descripcion']}
-    ''')
-    otra_patente: str = input("Desea buscar otra patente? (s/n): ")
-    if otra_patente == "s":
-        patente = input("Ingrese la patente: ")
-    else:
-        cerrar_funcion = True
-    print("Presione enter para continuar...")
+            writer.writerow([infraccion['timestamp'], infraccion['telefono'], infraccion['direccion'], infraccion['localidad'], infraccion['provincia'], infraccion['patente'], infraccion['descripcion_texto'], infraccion['descripcion_audio']])
+    print("\nEl archivo informe_infracciones.csv se ha creado exitosamente!\n Presione cualquier tecla para continuar...")
     getch()
 
 
-
-
-# Punto 3 del tp (COMPLETO) - Corresponde a opcion 3 del programa
+# Punto 2 del tp (COMPLETO) - Corresponde a opcion 2 del programa
 
 # 3.1 (COMPLETO)
 # MOSTRAR ESTADIOS DISPONIBLES        
@@ -140,7 +118,7 @@ def mostrar_estadios() -> str:
             if estadio in estadios:
                 cancha = True
             else:
-                print('Estadio no valido')
+                raise ValueError
         except ValueError:
             print('Estadio no valido')
     coordenadas_del_estadio: str = estadios[estadio]
@@ -186,91 +164,52 @@ def fecha_a_partir_de_timestamp(timestamp: str) -> str:
 # 3.3 (COMPLETO)
 # INFRACCIONES POR ESTADIO 
 def infracciones_estadio(infracciones: list[dict], coordenadas_estadio: str) -> None:
-    lista_impresa: bool = False
-    while not lista_impresa:
-        lista_infracciones_estadio: list = []
-        
-        for index in range(len(infracciones)):
-            fecha = fecha_a_partir_de_timestamp(infracciones[index]["timestamp"])
-            telefono: str = infracciones[index]['telefono']
-            latitud: int = infracciones[index]['latitud']
-            longitud: int = infracciones[index]['longitud']
-            ruta_foto: str = infracciones[index]['ruta_foto']
-            descripcion_texto: str = infracciones[index]['descripcion']
-            patente: str = obtener_patente(ruta_foto)
-            coordenadas: str = latitud + "," + longitud 
-            distancia: float = round(distance.distance(coordenadas_estadio, coordenadas).km, 3)
-            ubicacion = obtener_direccion(coordenadas)
-            
-            informe: dict = {"fecha": fecha, 
-                            "telefono": telefono, 
-                            "latitud": latitud, 
-                            "longitud": longitud,
-                            "ruta_foto": ruta_foto,
-                            "descripcion": descripcion_texto,
-                            "patente": patente,
-                            "coordenadas": coordenadas,
-                            "distancia": distancia,
-                            "ubicacion": ubicacion}
-            
-            if informe['distancia'] <= 1:    
-                lista_infracciones_estadio.append(informe)
-                             
-        print(f"Infracciones cercanas a este estadio: {len(lista_infracciones_estadio)}")
-        for index in range(len(lista_infracciones_estadio)):
-            print(f"[{index + 1}] {lista_infracciones_estadio[index]['descripcion']}")
-            print(f"En {lista_infracciones_estadio[index]['ubicacion']}")
-            print(f"El dia {lista_infracciones_estadio[index]['fecha']}\n")
+    lista_infracciones_estadio: list = []
+    
+    for index in range(len(infracciones)):
+        latitud: int = infracciones[index]['latitud']
+        longitud: int = infracciones[index]['longitud']
+        coordenadas: str = latitud + "," + longitud 
+        distancia: float = round(distance.distance(coordenadas_estadio, coordenadas).km, 3)
+        if distancia <= 1:
+            lista_infracciones_estadio.append(infracciones[index])
+                            
+    print(f"Infracciones cercanas a este estadio: {len(lista_infracciones_estadio)}")
+    for index in range(len(lista_infracciones_estadio)):
+        print(f'''[{index +1}] {lista_infracciones_estadio[index]['patente']}
+        En {lista_infracciones_estadio[index]['direccion'], lista_infracciones_estadio[index]['localidad'], lista_infracciones_estadio[index]['provincia']}
+        El dia {fecha_a_partir_de_timestamp(lista_infracciones_estadio[index]['timestamp'])}''')
 
-        lista_impresa = True
-        print("presione enter para continuar")
-        getch()
+    print("presione cualquier tecla para continuar")
+    getch()
 
 
 # Punto 4 del tp (COMPLETO) - Corresponde a opcion 4 del programa
 # INFRACCIONES MICROCENTRO
 def infracciones_microcentro(infracciones: dict):
-    lista_impresa: bool = False
-    while not lista_impresa:
-    # CUADRANTE APROXIMADO A PARTIR DE COORDENADAS OPUESTAS (ALEM Y CORDOBA, RIVADAVIA Y CALLAO)
-    # CORDOBA_Y_ALEM = '-34.5983795, -58.3725168'
-    # ALEM_Y_RIVADAVIA = '-34.6091603, -58.3725168'
-    # RIVADAVIA_Y_CALLAO = '-34.6091603, -58.3924939'
-    # CALLAO_Y_CORDOBA = '-34.5983795, -58.3924939'
-
-        tope_arriba_cuadrante: str = '-34.5983795'
-        tope_abajo_cuadrante: str = '-34.6091603'
-        tope_izquierdo_cuadrante: str = '-58.3924939'
-        tope_derecho_cuadrante: str = '-58.3725168'
-        # --------------------------------------------------------------------------------------------------------
-        lista_infracciones_microcentro: list = []
-        for index in range(len(infracciones)):
-            fecha = fecha_a_partir_de_timestamp(infracciones[index]["timestamp"])
-            latitud = infracciones[index]['latitud']
-            longitud = infracciones[index]['longitud']
-            ruta_foto: str = infracciones[index]['ruta_foto']
-            patente: str = obtener_patente(ruta_foto)
-            coordenadas: str = latitud + "," + longitud
-            ubicacion = obtener_direccion(coordenadas)
-            
-            informe: dict = {"fecha": fecha,
-                            "latitud": latitud, 
-                            "longitud": longitud,
-                            "ruta_foto": ruta_foto,
-                            "patente": patente,
-                            "ubicacion": ubicacion
-                                }
-            #El resto de la funcion funciona bien, el problema esta en la condicion como tal, va a haber que pensar otra cosa para el if.            
-            if (tope_arriba_cuadrante <= informe['latitud'] <= tope_abajo_cuadrante) and (tope_derecho_cuadrante <= informe['longitud'] <= tope_izquierdo_cuadrante):
-                lista_infracciones_microcentro.append(informe[index])
-
-        print(f"Infracciones cercanas a este estadio: {len(lista_infracciones_microcentro)}")
+    rivadavia_y_callao:tuple = (-34.6090112, -58.3919037)
+    cordoba_y_callao:tuple = (-34.5994954, -58.3929758)
+    rivadavia_y_alem:tuple = (-34.6070402, -58.3703629)
+    cordoba_y_alem:tuple = (-34.5982236, -58.3709155)
+# ---------------------------------------------------------------------------------
+    lista_infracciones_microcentro: list = []
+    for index in infracciones:
+        latitud: int = index['latitud']
+        longitud: int = index['longitud']
+        if rivadavia_y_callao[0] >= float(latitud) >= cordoba_y_callao[0] and cordoba_y_callao[1] <= float(longitud) <= rivadavia_y_callao[1]:
+            lista_infracciones_microcentro.append(index)
+    if len(lista_infracciones_microcentro) == 0:
+        print('No hay infracciones en el microcentro')
+    else:
+        print(f"Infracciones en el microcentro: {len(lista_infracciones_microcentro)}")
         for index in range(len(lista_infracciones_microcentro)):
-            print(f"[{index + 1}] {lista_infracciones_microcentro[index]['descripcion']}")
-            print(f"En {lista_infracciones_microcentro[index]['ubicacion']}")
-            print(f"El dia {lista_infracciones_microcentro[index]['fecha']}\n")
-
-        lista_impresa = True
+            print(f'''
+[{index +1}] {lista_infracciones_microcentro[index]['patente']}
+En {lista_infracciones_microcentro[index]['direccion'], lista_infracciones_microcentro[index]['localidad'], lista_infracciones_microcentro[index]['provincia']}
+El dia {fecha_a_partir_de_timestamp(lista_infracciones_microcentro[index]['timestamp'])}
+''')
+    print("presione cualquier tecla para continuar")	
+    getch()
 
 
 # funcion para leer las patentes del archivo de texto(COMPLETO)
@@ -293,7 +232,7 @@ def robados(infracciones: list[dict]) -> None:
         latitud: int = infracciones[index]['latitud']
         longitud: int = infracciones[index]['longitud']
         ruta_foto: str = infracciones[index]['ruta_foto']
-        descripcion_texto: str = infracciones[index]['descripcion']
+        descripcion_texto: str = infracciones[index]['descripcion_texto']
         patente: str = obtener_patente(ruta_foto)
         coordenadas: str = latitud + "," + longitud 
         ubicacion = obtener_direccion(coordenadas)
@@ -302,7 +241,7 @@ def robados(infracciones: list[dict]) -> None:
                         "latitud": latitud, 
                         "longitud": longitud,
                         "ruta_foto": ruta_foto,
-                        "descripcion": descripcion_texto,
+                        "descripcion_texto": descripcion_texto,
                         "patente": patente,
                         "coordenadas": coordenadas,
                         "ubicacion": ubicacion}
@@ -316,6 +255,43 @@ def robados(infracciones: list[dict]) -> None:
     # imprimo la patente, la fecha y la ubicacion de las infracciones robadas
     for infraccion in lista_de_infracciones_robadas:
         print(f"Patente: {infraccion['patente']}, Fecha: {infraccion['fecha']}, Ubicacion: {infraccion['ubicacion']}\n")
+
+
+def plotear_imagen(img):
+    plt.axis('off')
+    plt.imshow(cv2.cvtColor(img))
+    plt.show()
+
+def buscar_patente(infracciones: list):
+    cls()
+    print("PATENTES REGISTRADAS:")
+    f: int = 0
+    for infraccion in infracciones:
+        f += 1
+        print((f, " - ", infraccion['patente']))
+    patente_correcta: bool = False
+    while not patente_correcta:
+        try:
+            patente: str = input("\nIngrese la patente que desea buscar: ")
+            for infraccion in infracciones:
+                if infraccion['patente'] == patente.lower():
+                    patente_correcta = True
+                else:
+                    raise ValueError
+        except ValueError:
+            print("\nLa patente ingresada no es valida. Por favor, intente nuevamente.")
+        # abrir la foto de la patente
+        if patente_correcta:
+            for infraccion in infracciones:
+                if infraccion['patente'] == patente.lower():
+                    # plotear la foto de la patente
+                    ruta_foto: str = infraccion['ruta_foto']
+                    img = cv2.imread(ruta_foto)
+                    plotear_imagen(img)
+                            # mostrar en un mapa la ubicacion de la infraccion
+                    webbrowser.open("https://www.google.com/maps/search/?api=1&query=" + infraccion['latitud'] + "," + infraccion['longitud'])
+                
+        cls()
 
 
 # Punto 6 del tp (COMPLETO) - Corresponde a opcion 7 del programa
@@ -375,72 +351,70 @@ def imprimmir_menu() -> None:
 **** MENU PRINCIPAL ****
 ========================
 [1] - Crear un nuevo archivo de infracciones
-[2] - Buscar infracciones por patente
-[3] - Listar las infracciones cercanas (1km) a los estadios
-[4] - Listar las infracciones de microcentro
-[5] - Emitir una alerta de vehiculos robados
-[6] - Informacion a partir de dominio, mostrar foto y mapa de google con la ubicacion marcada con un punto
-[7] - Grafico a partir de las denuncias recibidas por mes
-[8] - Salir del programa''')
+[2] - Listar las infracciones cercanas (1km) a los estadios
+[3] - Listar las infracciones de microcentro
+[4] - Emitir una alerta de vehiculos robados
+[5] - Informacion a partir de dominio, mostrar foto y mapa de google con la ubicacion marcada con un punto
+[6] - Grafico a partir de las denuncias recibidas por mes
+[7] - Salir del programa''')
 
 
 # MENU PRINCIPAL
-def menu_principal(infracciones: list, opcion: str) -> None:   
-        while opcion != "8":
-            if opcion == "1":
-                print("Ha seleccionado --> [1]\n")
-                multas: list[dict] = crear_archivo(infracciones)
-                for multa in multas:
-                    print(multa)
-                cls()
-                imprimmir_menu()
-                opcion: str = input("\n\nElija una opcion del menu para realizar otra accion: ")
-            elif opcion == "2":
-                print("Ha seleccionado --> [2]\n")
-                patente: str = input("Ingrese la patente que desea buscar: ")
-                buscar_patente(infracciones, patente)
-                cls()
-                imprimmir_menu()
-                opcion: str = input("\n\nElija una opcion del menu para realizar otra accion: ")
-            elif opcion == "3":
-                print("Ha seleccionado --> [3]\n")
-                estadio: str = mostrar_estadios()
-                infracciones_estadio(infracciones, estadio)
-                cls()
-                imprimmir_menu()
-                opcion: str = input("\n\nElija una opcion del menu para realizar otra accion: ")
-                
-            elif opcion == "4":
-                print("Ha seleccionado --> [4]\n")
-                infracciones_microcentro(infracciones)
-                cls()
-                imprimmir_menu()
-                opcion: str = input("\n\nElija una opcion del menu para realizar otra accion: ") 
-                
-            elif opcion == "5":
-                print("Ha seleccionado --> [5]\n")
-                robados(infracciones)
-                cls()
-                imprimmir_menu()
-                opcion: str = input("\n\nElija una opcion del menu para realizar otra accion: ")
-                    
-            elif opcion == "6":
-                print("Ha seleccionado --> [6]\n")
-                # COMPLETAR
-                cls()
-                imprimmir_menu()
-                opcion: str = input("\n\nElija una opcion del menu para realizar otra accion: ")
 
-            elif opcion == "7":
-                print("Ha seleccionado --> [7]\n")
-                grafico(infracciones)
-                cls()
-                imprimmir_menu()
-                opcion: str = input("\n\nElija una opcion del menu para realizar otra accion: ")
-        else:
-            print("\n\nHa seleccionado --> [8]")
-            print("Hasta luego, vuelva pronto!!")
-            exit()
+def menu_principal(infracciones: list) -> None:
+    cerrar_menu: bool = False
+    while not cerrar_menu:
+        opcion_ok = False
+        while not opcion_ok:
+            try:
+                opcion: int = int(input('Ingrese una opcion: '))
+                if 0 < opcion < 8:
+                    opcion = str(opcion)
+                    opcion_ok = True
+                else: 
+                    raise ValueError
+            except ValueError:
+                print('Opcion invalida, ingrese una opcion valida')
+            else:
+
+                if opcion == "1":
+                    print("Ha seleccionado --> [1]\n")
+                    crear_archivo(infracciones)
+                    cls()
+                    imprimmir_menu()
+                elif opcion == "2":
+                    print("Ha seleccionado --> [2]\n")
+                    estadio: str = mostrar_estadios()
+                    infracciones_estadio(infracciones, estadio)
+                    cls()
+                    imprimmir_menu()
+                elif opcion == "3":
+                    print("Ha seleccionado --> [3]\n")
+                    infracciones_microcentro(infracciones)
+                    cls()
+                    imprimmir_menu()
+                elif opcion == "4":
+                    print("Ha seleccionado --> [4]\n")
+                    robados(infracciones)
+                    cls()
+                    imprimmir_menu()
+                elif opcion == "5":
+                    print("Ha seleccionado --> [5]\n")
+                    buscar_patente(infracciones)
+                    cls()
+                    imprimmir_menu()
+                elif opcion == "6":
+                    print("Ha seleccionado --> [6]\n")
+                    grafico(infracciones)
+                    cls()
+                    imprimmir_menu()
+                elif opcion == "7":
+                    print("Ha seleccionado --> [7]\n")
+                    print("Gracias por utilizar el programa")
+                    cerrar_menu = True
+                    exit()
+                opcion_ok = False
+            
     
 
 # INICIALIZADOR DEL PROGRAMA
@@ -459,19 +433,7 @@ def main() -> None:
 88 88 Y88 88""   88"Yb   dP__Yb  Yb      Yb      88 Yb   dP 88 Y88 88""   o.`Y8b 
 88 88  Y8 88     88  Yb dP""""Yb  YboodP  YboodP 88  YbodP  88  Y8 888888 8bodP' ''')
     imprimmir_menu()
-    opcion_es_numerica: bool = False
-    while not opcion_es_numerica:
-        try:
-            opcion: str = input("\nIngrese una opcion para continuar: ")
-            opcion = int(opcion)
-            if opcion <0 or opcion > 8:
-                raise ValueError
-            else:
-                opcion_es_numerica = True
-                opcion = str(opcion)
-        except ValueError:
-            print("La opcion ingresada no es numerica o no esta dentro del rango de opciones")
-    menu_principal(infracciones, opcion)
+    menu_principal(infracciones)
 
 
 main()
