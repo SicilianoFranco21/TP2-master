@@ -1,6 +1,7 @@
 import requests
 import csv
 from matplotlib import pyplot as plt
+import matplotlib.image as mpimg
 from geopy.geocoders import Nominatim
 from geopy import distance
 from msvcrt import getch
@@ -256,12 +257,7 @@ def robados(infracciones: list[dict]) -> None:
     for infraccion in lista_de_infracciones_robadas:
         print(f"Patente: {infraccion['patente']}, Fecha: {infraccion['fecha']}, Ubicacion: {infraccion['ubicacion']}\n")
 
-
-def plotear_imagen(img):
-    plt.axis('off')
-    plt.imshow(cv2.cvtColor(img))
-    plt.show()
-
+# Punto 6 del programa- Funcion que se encarga de mostrar las infracciones de un autoen base a la patente(COMPLETO)
 def buscar_patente(infracciones: list):
     cls()
     print("PATENTES REGISTRADAS:")
@@ -271,26 +267,29 @@ def buscar_patente(infracciones: list):
         print((f, " - ", infraccion['patente']))
     patente_correcta: bool = False
     while not patente_correcta:
-        try:
-            patente: str = input("\nIngrese la patente que desea buscar: ")
-            for infraccion in infracciones:
-                if infraccion['patente'] == patente.lower():
-                    patente_correcta = True
-                else:
-                    raise ValueError
-        except ValueError:
-            print("\nLa patente ingresada no es valida. Por favor, intente nuevamente.")
+        patente: str = input("\nIngrese la patente que desea buscar, en caso de ser erronea le consultaremos nuevamente(para finalizar coloque fin): ").lower()
+        if patente == "fin":
+            return
+        for infraccion in infracciones:
+            if infraccion['patente'] == patente:
+                patente_correcta = True
         # abrir la foto de la patente
-        if patente_correcta:
+        if patente_correcta == True:
             for infraccion in infracciones:
-                if infraccion['patente'] == patente.lower():
+                if infraccion['patente'] == patente:
                     # plotear la foto de la patente
                     ruta_foto: str = infraccion['ruta_foto']
-                    img = cv2.imread(ruta_foto)
-                    plotear_imagen(img)
-                            # mostrar en un mapa la ubicacion de la infraccion
-                    webbrowser.open("https://www.google.com/maps/search/?api=1&query=" + infraccion['latitud'] + "," + infraccion['longitud'])
-                
+                    img = mpimg.imread(ruta_foto)
+                    imgplot = plt.imshow(img)
+                    plt.show()
+                    # mostrar en un mapa la ubicacion de la infraccion
+                    webbrowser.open("https://www.google.com/maps/search/?api=1&query=" + infraccion['latitud'] + "," + infraccion['longitud'])         
+            print("PATENTES REGISTRADAS:")
+            f: int = 0
+            for infraccion in infracciones:
+                f += 1
+                print((f, " - ", infraccion['patente']))
+            patente_correcta: bool = False
         cls()
 
 
