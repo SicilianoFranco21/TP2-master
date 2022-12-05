@@ -11,7 +11,7 @@ Una vez registrado, la misma provee un token para poder utilizar la API de detec
 ## Como correr el programa:
 
 - Instalar las dependencias: `pip install -r requisitos. txt`
-- Reemplazar el token de `https://platerecognizer.com/` en el archivo `utils.py` (constante API_TOKEN)
+- Reemplazar el token de https://platerecognizer.com/ en el archivo `utils.py` (constante API_TOKEN)
 - Ejecutar el script principal: `python3 main.py`
 
 ## Aclaraciones utiles:
