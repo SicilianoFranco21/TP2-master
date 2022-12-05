@@ -1,16 +1,16 @@
-"2022-01-14 09:45:59", "1135774328", -34.6352184, -58.3658165,imgs/000.png, "descripcion de la foto", audio\hola.wav
-"2022-02-22 19:22:59", "1160504227", -34.5467988, -58.4498559,imgs/001.png, "descripcion de la foto", audio\hola.wav
-"2022-03-14 09:45:59", "1135774312", -34.5543312, -58.4979146,imgs/002.png, "descripcion de la foto", audio\hola.wav
-"2022-04-22 19:22:59", "1160504213", -34.558908, -58.489675,imgs/003.png, "descripcion de la foto", audio\hola.wav
-"2022-05-14 09:45:59", "1135774314", -34.557897, -58.488997,imgs/004.png, "descripcion de la foto", audio\hola.wav
-"2022-06-22 19:22:59", "1160504215", -34.565241, -58.464775,imgs/005.png, "descripcion de la foto", audio\hola.wav
-"2022-08-22 19:22:59", "1160504217", -34.552142, -58.460102,imgs/006.png, "descripcion de la foto", audio\hola.wav
-"2022-09-14 09:45:59", "1135774318", -34.597608, -58.460359,imgs/007.png, "descripcion de la foto", audio\hola.wav
-"2022-11-14 09:45:59", "1135774330", -34.594648, -58.427863,imgs/008.png, "descripcion de la foto", audio\hola.wav
-"2022-12-22 19:22:59", "1160504231", -34.63383575595846, -58.36981399469558,imgs/009.png, "descripcion de la foto", audio\hola.wav
-"2022-11-01 09:45:59", "1135774332", -31.26416322598169, -61.518719163478856,imgs/010.png, "descripcion de la foto", audio\hola.wav
-"2022-11-03 09:45:59", "1135774333", -34.54839910641951, -58.45324909915261,imgs/011.png, "descripcion de la foto", audio\hola.wav
-"2022-11-04 19:22:59", "1160504299", -34.547930755859014, -58.448292377170034,imgs/012.png, "descripcion de la foto", audio\hola.wav
-"2022-11-05 09:45:59", "1135774388", -34.607590840598256, -58.38932723866813,imgs/013.png, "descripcion de la foto", audio\hola.wav
-"2022-11-10 19:29:59", "1160504245", -34.630652870674616, -58.368770789926536,imgs/014.png, "descripcion de la foto", audio\hola.wav
-"2022-11-11 09:43:59", "1135774369", -34.62214220887412, -58.427822301574665,imgs/015.png, "descripcion de la foto", audio\hola.wav
+"2022-01-14 09:45:59", 1135774328, -34.6352184, -58.3658165,imgs/000.png, "descripcion de la foto","audios/000.wav"
+"2022-02-22 19:22:59", 1160504227, -34.5467988, -58.4498559,imgs/001.png, "descripcion de la foto","audios/001.wav"
+"2022-03-14 09:45:59", 1135774312, -34.5543312, -58.4979146,imgs/002.png, "descripcion de la foto","audios/002.wav"
+"2022-04-22 19:22:59", 1160504213, -34.558908, -58.489675,imgs/003.png, "descripcion de la foto","audios/003.wav"
+"2022-05-14 09:45:59", 1135774314, -34.557897, -58.488997,imgs/004.png, "descripcion de la foto","audios/004.wav"
+"2022-06-22 19:22:59", 1160504215, -34.565241, -58.464775,imgs/005.png, "descripcion de la foto","audios/005.wav"
+"2022-08-22 19:22:59", 1160504217, -34.552142, -58.460102,imgs/006.png, "descripcion de la foto","audios/006.wav"
+"2022-09-14 09:45:59", 1135774318, -34.597608, -58.460359,imgs/007.png, "descripcion de la foto","audios/007.wav"
+"2022-11-14 09:45:59", 1135774330, -34.594648, -58.427863,imgs/008.png, "descripcion de la foto","audios/008.wav"
+"2022-12-22 19:22:59", 1160504231, -34.63383575595846, -58.36981399469558,imgs/009.png, "descripcion de la foto","audios/009.wav"
+"2022-11-01 09:45:59", 1135774332, -31.26416322598169, -61.518719163478856,imgs/010.png, "descripcion de la foto","audios/010.wav"
+"2022-11-03 09:45:59", 1135774333, -34.54839910641951, -58.45324909915261,imgs/011.png, "descripcion de la foto","audios/011.wav"
+"2022-11-04 19:22:59", 1160504299, -34.547930755859014, -58.448292377170034,imgs/012.png, "descripcion de la foto","audios/012.wav"
+"2022-11-05 09:45:59", 1135774388, -34.607590840598256, -58.38932723866813,imgs/013.png, "descripcion de la foto","audios/013.wav"
+"2022-11-10 19:29:59", 1160504245, -34.630652870674616, -58.368770789926536,imgs/014.png, "descripcion de la foto","audios/014.wav"
+"2022-11-11 09:43:59", 1135774369, -34.62214220887412, -58.427822301574665,imgs/015.png, "descripcion de la foto","audios/015.wav"
