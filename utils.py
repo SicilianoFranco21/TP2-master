@@ -18,15 +18,17 @@ def obtener_patente(ruta_foto: str) -> str:
     # postcondicion: devuelve un string con la patente del vehiculo
     
     regions: list = ['ar', 'us-ca'] 
-    with open(ruta_foto, 'rb') as fp:
-        response = requests.post(
-            'https://api.platerecognizer.com/v1/plate-reader/',
-            data=dict(regions=regions),
-            files=dict(upload=fp),
-            headers={'Authorization': API_TOKEN})
-        patente : str = response.json()['results'][0]['plate']
-        return patente
-
+    try:
+        with open(ruta_foto, 'rb') as fp:
+            response = requests.post(
+                'https://api.platerecognizer.com/v1/plate-reader/',
+                data=dict(regions=regions),
+                files=dict(upload=fp),
+                headers={'Authorization': API_TOKEN})
+            patente : str = response.json()['results'][0]['plate']
+            return patente
+    except IndexError:
+        print('No se detectó patente')
 
 def obtener_audio(ruta_audio) -> str:
     
