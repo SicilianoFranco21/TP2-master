@@ -5,9 +5,11 @@
 Grupo 1 - Alabes, Cardenas, Florio, Siciliano
 
 ## Requisitos previos:
+
 Para poder utilizar este programa correctamente, se debe tener una cuenta creada en la pagina:
 https://platerecognizer.com/ . 
 Una vez registrado, la misma provee un token para poder utilizar la API de deteccion de placas.
+
 ## Como correr el programa:
 
 - Instalar las dependencias: `pip install -r requisitos. txt`
