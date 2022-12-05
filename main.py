@@ -8,15 +8,13 @@ from msvcrt import getch
 import os
 import webbrowser
 import cv2
-
+# (Token de renovacion) = 4ba713396c65a352502abcbc1902c6d64c7e30ae
 #CONSTANTES
 API_TOKEN: str = 'Token 06314a64093e9225ccf62c5872988131c9c5909c'
-
 
 # CLEAR SCREEN
 def cls():
     os.system('cls' if os.name=='nt' else 'clear')
-
 
 #Obtencion de patentes mediante el uso de una API
 def obtener_patente(ruta_foto: str) -> str:
@@ -29,7 +27,6 @@ def obtener_patente(ruta_foto: str) -> str:
             headers={'Authorization': API_TOKEN})
         patente : str = response.json()['results'][0]['plate']
         return patente
-
 
 #Obtencion de direcciones
 def obtener_direccion(coordenadas: str) -> tuple:
@@ -46,10 +43,8 @@ def obtener_direccion(coordenadas: str) -> tuple:
         pass
     return direccion, localidad, provincia
 
-
 def obtener_descripcion_audio(ruta_audio: str) -> str:
     return "descripcion_audio"
-
 
 # Punto 1 del tp (COMPLETO)
 def leer_archivo() -> list[dict]:
@@ -102,7 +97,6 @@ def crear_archivo(infracciones: list[dict]):
     print("\nEl archivo informe_infracciones.csv se ha creado exitosamente!\n Presione cualquier tecla para continuar...")
     getch()
 
-
 # Punto 2 del tp (COMPLETO) - Corresponde a opcion 2 del programa
 
 # 3.1 (COMPLETO)
@@ -124,7 +118,6 @@ def mostrar_estadios() -> str:
             print('Estadio no valido')
     coordenadas_del_estadio: str = estadios[estadio]
     return coordenadas_del_estadio
-
 
 # 3.2 (COMPLETO)
 def fecha_a_partir_de_timestamp(timestamp: str) -> str:
@@ -161,29 +154,24 @@ def fecha_a_partir_de_timestamp(timestamp: str) -> str:
     fecha = f'{dia} de {mes} de {anio}'
     return fecha
 
-
 # 3.3 (COMPLETO)
 # INFRACCIONES POR ESTADIO 
 def infracciones_estadio(infracciones: list[dict], coordenadas_estadio: str) -> None:
     lista_infracciones_estadio: list = []
-    
     for index in range(len(infracciones)):
         latitud: int = infracciones[index]['latitud']
         longitud: int = infracciones[index]['longitud']
         coordenadas: str = latitud + "," + longitud 
         distancia: float = round(distance.distance(coordenadas_estadio, coordenadas).km, 3)
         if distancia <= 1:
-            lista_infracciones_estadio.append(infracciones[index])
-                            
+            lista_infracciones_estadio.append(infracciones[index])                        
     print(f"Infracciones cercanas a este estadio: {len(lista_infracciones_estadio)}")
     for index in range(len(lista_infracciones_estadio)):
         print(f'''[{index +1}] {lista_infracciones_estadio[index]['patente']}
         En {lista_infracciones_estadio[index]['direccion'], lista_infracciones_estadio[index]['localidad'], lista_infracciones_estadio[index]['provincia']}
         El dia {fecha_a_partir_de_timestamp(lista_infracciones_estadio[index]['timestamp'])}''')
-
     print("presione cualquier tecla para continuar")
     getch()
-
 
 # Punto 4 del tp (COMPLETO) - Corresponde a opcion 4 del programa
 # INFRACCIONES MICROCENTRO
@@ -212,7 +200,6 @@ El dia {fecha_a_partir_de_timestamp(lista_infracciones_microcentro[index]['times
     print("presione cualquier tecla para continuar")	
     getch()
 
-
 # funcion para leer las patentes del archivo de texto(COMPLETO)
 def leer_archivo_txt() -> list:
     patentes_robadas: list = []  
@@ -220,7 +207,6 @@ def leer_archivo_txt() -> list:
         for linea in archivo_txt:
             patentes_robadas.append(linea.strip())
     return patentes_robadas
-
 
 # Punto 5 del programa- Funcion que se encarga de mostrar los autos robados(COMPLETO)
 def robados(infracciones: list[dict]) -> None:       
