@@ -7,12 +7,12 @@
 
 ## Requisitos previos:
 Para poder utilizar este programa correctamente, se debe tener una cuenta creada en la pagina:
-`https://platerecognizer.com/`
+https://platerecognizer.com/
 Una vez registrado, la misma provee un token para poder utilizar la API de deteccion de placas.
 ## Como correr el programa:
 
 - Instalar las dependencias: `pip install -r requisitos. txt`
-- Reemplazar el token de `https://platerecognizer.com/` en el archivo `funciones.py` (constante API_TOKEN)
+- Reemplazar el token de `https://platerecognizer.com/` en el archivo `utils.py` (constante API_TOKEN)
 - Ejecutar el script principal: `python3 main.py`
 
 # Aclaraciones utiles:
