@@ -8,6 +8,7 @@ from msvcrt import getch
 import os
 import webbrowser
 import cv2
+from speech_recognition import Recognizer, AudioFile # modulo que permite la deteccion de voz
 # (Token de renovacion) = 4ba713396c65a352502abcbc1902c6d64c7e30ae
 #CONSTANTES
 API_TOKEN: str = 'Token 06314a64093e9225ccf62c5872988131c9c5909c'
@@ -27,6 +28,13 @@ def obtener_patente(ruta_foto: str) -> str:
             headers={'Authorization': API_TOKEN})
         patente : str = response.json()['results'][0]['plate']
         return patente
+
+#Obtencion de patentes mediante el uso de una API
+def obtener_descripcion_audio(ruta_audio:str) -> str:
+    with AudioFile(ruta_audio) as fuente:
+        audio = Recognizer().record(fuente)
+    texto_audio = Recognizer().recognize_google(audio,language='es-AR')
+    return texto_audio
 
 #Obtencion de direcciones
 def obtener_direccion(coordenadas: str) -> tuple:
@@ -51,7 +59,7 @@ def leer_archivo() -> list[dict]:
     cls()
     print("\nPor favor, espere mientras se abre el archivo de infracciones...")
     infracciones: list = []
-    with open('multas.csv', 'r') as archivo_csv:
+    with open('Infracciones.csv', 'r') as archivo_csv:
         lector = csv.reader(archivo_csv, delimiter=',')
         for linea in lector:
 
@@ -175,17 +183,17 @@ def infracciones_estadio(infracciones: list[dict], coordenadas_estadio: str) -> 
 
 # Punto 4 del tp (COMPLETO) - Corresponde a opcion 4 del programa
 # INFRACCIONES MICROCENTRO
-def infracciones_microcentro(infracciones: dict):
-    rivadavia_y_callao:tuple = (-34.6090112, -58.3919037)
-    cordoba_y_callao:tuple = (-34.5994954, -58.3929758)
-    rivadavia_y_alem:tuple = (-34.6070402, -58.3703629)
-    cordoba_y_alem:tuple = (-34.5982236, -58.3709155)
+def infracciones_microcentro(infracciones: dict) -> None:
+    rivadavia_y_callao: tuple = (-34.6090112, -58.3919037)
+    cordoba_y_callao: tuple = (-34.5994954, -58.3929758)
+    rivadavia_y_alem: tuple = (-34.6070402, -58.3703629)
+    cordoba_y_alem: tuple = (-34.5982236, -58.3709155)
 # ---------------------------------------------------------------------------------
     lista_infracciones_microcentro: list = []
     for index in infracciones:
         latitud: int = index['latitud']
         longitud: int = index['longitud']
-        if rivadavia_y_callao[0] >= float(latitud) >= cordoba_y_callao[0] and cordoba_y_callao[1] <= float(longitud) <= rivadavia_y_callao[1]:
+        if ((float(latitud) >= rivadavia_y_callao[0] or float(latitud) >= rivadavia_y_alem[0]) and (float(latitud) <= cordoba_y_callao[0] or float(latitud) <= cordoba_y_alem[0])) and ((float(longitud) >= cordoba_y_callao[1] or float(longitud) >= rivadavia_y_callao[1]) and (float(longitud) <= rivadavia_y_alem[1] or cordoba_y_alem[1])):
             lista_infracciones_microcentro.append(index)
     if len(lista_infracciones_microcentro) == 0:
         print('No hay infracciones en el microcentro')
@@ -197,7 +205,7 @@ def infracciones_microcentro(infracciones: dict):
 En {lista_infracciones_microcentro[index]['direccion'], lista_infracciones_microcentro[index]['localidad'], lista_infracciones_microcentro[index]['provincia']}
 El dia {fecha_a_partir_de_timestamp(lista_infracciones_microcentro[index]['timestamp'])}
 ''')
-    print("presione cualquier tecla para continuar")	
+    print("presione cualquier tecla para continuar")
     getch()
 
 # funcion para leer las patentes del archivo de texto(COMPLETO)
