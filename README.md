@@ -3,11 +3,11 @@
 ### Universidad de Buenos Aires - Facultad de Ingenieria
 ### Trabajo Practico N°2 - Algoritmos y Programación 1 - Catedra Costa
 ### 2do Cuatrimestre 2022
-### Grupo 1 - Alabes, Florio Siciliano
+### Grupo 1 - Alabes, Florio, Siciliano
 
 ## Requisitos previos:
 Para poder utilizar este programa correctamente, se debe tener una cuenta creada en la pagina:
-https://platerecognizer.com/
+https://platerecognizer.com/ . 
 Una vez registrado, la misma provee un token para poder utilizar la API de deteccion de placas.
 ## Como correr el programa:
 
