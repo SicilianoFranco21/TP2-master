@@ -1,7 +1,7 @@
 # GESTOR DE INFRACCIONES
- Universidad de Buenos Aires - Facultad de Ingenieria 
- Trabajo Practico N°2 - Algoritmos y Programación 1 - Catedra Costa 
-2do Cuatrimestre 2022 
+ Universidad de Buenos Aires - Facultad de Ingenieria \n
+ Trabajo Practico N°2 - Algoritmos y Programación 1 - Catedra Costa \n
+2do Cuatrimestre 2022 \n
 Grupo 1 - Alabes, Florio, Siciliano
 
 ## Requisitos previos:
