@@ -43,15 +43,15 @@ def obtener_audio(ruta_audio) -> str:
     return texto_audio
 
 
-def obtener_direccion(coordenadas: str) -> tuple:
+def obtener_direccion(coordenadas: str):
 
     # funcion que permite obtener la direccion de un lugar a partir de sus coordenadas
     # precondicion: recibe un string con las coordenadas del lugar
     # postcondicion: devuelve 3 strings, correspondiendo cada uno respectivamente a la direccion, localidad y provincia del lugar
-
-    direccion: str = ''
-    localidad: str = ''
-    provincia: str = ''
+    
+    direccion = ""
+    localidad = ""
+    provincia = ""
     try:
         geolocator = Nominatim(user_agent="manejo_csv")
         location = geolocator.reverse(coordenadas, language="es", exactly_one=True)

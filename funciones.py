@@ -20,10 +20,15 @@ def mostrar_estadios() -> str:
     # postcondicion: devuelve un string con las coordenadas del estadio elegido
 
     cls()
-    print('-----Estadios Disponibles-----')
+    print('''
+┌────────────────────────────────────────────────────────────────────────────────┐
+│                             ESTADIOS DISPONIBLES                               │
+└────────────────────────────────────────────────────────────────────────────────┘''')
     estadios: dict = {'RIVER': '-34.5479338, -58.4561614', 'BOCA': '-34.6353183, -58.3650225'}
     for estadio in estadios:
-        print(f"* {estadio}")
+        print(f'''┌────────────────────────────────────────────────────────────────────────────────┐
+│                                   {estadio}                                        │
+└────────────────────────────────────────────────────────────────────────────────┘''')
     cancha: bool = False
     while not cancha:
         try:
@@ -52,11 +57,24 @@ def infracciones_estadio(infracciones: list[dict], coordenadas_estadio: str) -> 
         distancia: float = round(distance.distance(coordenadas_estadio, coordenadas).km, 3)
         if distancia <= 1:
             lista_infracciones_estadio.append(infracciones[index])                        
-    print(f"Infracciones cercanas a este estadio: {len(lista_infracciones_estadio)}")
+    print(f'''
+┌────────────────────────────────────────────────────────────────────────────────┐
+│  Infracciones cercanas a este estadio: {len(lista_infracciones_estadio)}                                       │
+└────────────────────────────────────────────────────────────────────────────────┘''')
     for index in range(len(lista_infracciones_estadio)):
-        print(f'''[{index +1}] {lista_infracciones_estadio[index]['patente']}
-        En {lista_infracciones_estadio[index]['direccion'], lista_infracciones_estadio[index]['localidad'], lista_infracciones_estadio[index]['provincia']}
-        El dia {fecha_a_partir_de_timestamp(lista_infracciones_estadio[index]['timestamp'])}''')
+        print(f'''
+┌────────────────────────────────────────────────────────────────────────────────┐
+│  [{index +1}] {lista_infracciones_estadio[index]['patente']}                                                                   │
+├────────────────────────────────────────────────────────────────────────────────┤
+│  En {lista_infracciones_estadio[index]['direccion']},
+│     {lista_infracciones_estadio[index]['localidad']},
+│     {lista_infracciones_estadio[index]['provincia']}
+│                                                                                
+│  El dia {fecha_a_partir_de_timestamp(lista_infracciones_estadio[index]['timestamp'])}
+│                                                                                
+└────────────────────────────────────────────────────────────────────────────────┘
+''')
+        
     print("presione cualquier tecla para continuar")
     getch()
 
@@ -81,32 +99,52 @@ def infracciones_microcentro(infracciones: dict) -> None:
     if len(lista_infracciones_microcentro) == 0:
         print('No hay infracciones en el microcentro')
     else:
-        print(f"Infracciones en el microcentro: {len(lista_infracciones_microcentro)}")
+        print(f'''┌────────────────────────────────────────────────────────────────────────────────┐
+│  Infracciones cercanas microcentro: {len(lista_infracciones_microcentro)}                                          │
+└────────────────────────────────────────────────────────────────────────────────┘''')
         for index in range(len(lista_infracciones_microcentro)):
             print(f'''
-[{index +1}] {lista_infracciones_microcentro[index]['patente']}
-En {lista_infracciones_microcentro[index]['direccion'], lista_infracciones_microcentro[index]['localidad'], lista_infracciones_microcentro[index]['provincia']}
-El dia {fecha_a_partir_de_timestamp(lista_infracciones_microcentro[index]['timestamp'])}
+┌────────────────────────────────────────────────────────────────────────────────┐
+│  [{index +1}] {lista_infracciones_microcentro[index]['patente']}                                                                   │
+├────────────────────────────────────────────────────────────────────────────────┤
+│  En {lista_infracciones_microcentro[index]['direccion']},
+│     {lista_infracciones_microcentro[index]['localidad']},
+│     {lista_infracciones_microcentro[index]['provincia']}
+│                                                                                
+│  El dia {fecha_a_partir_de_timestamp(lista_infracciones_microcentro[index]['timestamp'])}
+│                                                                                
+└────────────────────────────────────────────────────────────────────────────────┘
 ''')
     print("presione cualquier tecla para continuar")
     getch()
 
 
 def robados(infracciones: list[dict]) -> None:
-
+    
     # funcion que permite mostrar las infracciones que se realizaron a autos robados
     # precondicion: recibe una lista de diccionarios con las infracciones
     # postcondicion: imprime por pantalla la cantidad de infracciones que se realizaron a autos robados y los datos de cada infraccion, pero no devuelve nada
-       
+
+    cls()   
     patentes_robadas: list = leer_archivo_txt()
-    print("autos robados:")
+    print('''
+┌────────────────────────────────────────────────────────────────────────────────┐
+│                        AUTOS REPORTADOS COMO ROBADOS:                          │
+└────────────────────────────────────────────────────────────────────────────────┘''')
     for index in range(len(infracciones)):
         patente: str = infracciones[index]['patente']
         if patente in patentes_robadas:
             print(f'''
-Patente: {infracciones[index]['patente']}
-En {infracciones[index]['direccion'], infracciones[index]['localidad'], infracciones[index]['provincia']}
-El dia {fecha_a_partir_de_timestamp(infracciones[index]['timestamp'])}
+┌────────────────────────────────────────────────────────────────────────────────┐
+│  PATENTE: {infracciones[index]['patente']}                                                              │
+├────────────────────────────────────────────────────────────────────────────────┤
+│  En {infracciones[index]['direccion']},
+│     {infracciones[index]['localidad']},
+│     {infracciones[index]['provincia']}
+│                                                                                
+│  Reportado el dia {fecha_a_partir_de_timestamp(infracciones[index]['timestamp'])}
+│                                                                                
+└────────────────────────────────────────────────────────────────────────────────┘
 ''')
     print("presione cualquier tecla para continuar")
     getch()
@@ -119,14 +157,20 @@ def buscar_patente(infracciones: list) -> None:
     # postcondicion: imprime por pantalla la cantidad de infracciones que se realizaron a esa patente y los datos de cada infraccion, pero no devuelve nada
 
     cls()
-    print("PATENTES REGISTRADAS:")
-    f: int = 0
-    for infraccion in infracciones:
-        f += 1
-        print(f'''[{f}] {infraccion['patente']}''')
+    
     patente_correcta: bool = False
     while not patente_correcta:
         try:
+            print('''
+┌────────────────────────────────────────────────────────────────────────────────┐
+│                             PATENTES REGISTRADAS                               │
+└────────────────────────────────────────────────────────────────────────────────┘''')
+            f: int = 0
+            for infraccion in infracciones:
+                f += 1
+                print(f'''┌────────────────────────────────────────────────────────────────────────────────┐
+│  [{f}] {infraccion['patente']}                                                                   │
+└────────────────────────────────────────────────────────────────────────────────┘''')
             patente: str = input("\nIngrese la patente que desea buscar, en caso de ser erronea le consultaremos nuevamente \nPara volver al menu, presione enter: ").lower()
             if patente != "":
                 for infraccion in infracciones:
@@ -138,6 +182,7 @@ def buscar_patente(infracciones: list) -> None:
                 raise ValueError
         except ValueError:
             print("Ingrese una patente valida")
+            
         if patente_correcta == True and patente != "":
             for infraccion in infracciones:
                 if infraccion['patente'] == patente:
@@ -213,18 +258,30 @@ def imprimmir_menu() -> None:
     # funcion que imprime por pantalla el menu principal
 
     print('''
-========================
-**** MENU PRINCIPAL ****
-========================
-[1] - Crear un nuevo archivo de infracciones
-[2] - Listar las infracciones cercanas (1km) a los estadios
-[3] - Listar las infracciones de microcentro
-[4] - Emitir una alerta de vehiculos robados
-[5] - Informacion a partir de dominio, mostrar foto y mapa de google con la ubicacion marcada con un punto
-[6] - Grafico a partir de las denuncias recibidas por mes
-[7] - Salir del programa''')
 
-
+┌─────────────────────────────────────────────────────────────────────────────┐    
+│      __  __                               _            _             _      │
+│     |  \/  | ___ _ __  _   _   _ __  _ __(_)_ __   ___(_)_ __   __ _| |     │
+│     | |\/| |/ _ \ '_ \| | | | | '_ \| '__| | '_ \ / __| | '_ \ / _` | |     │
+│     | |  | |  __/ | | | |_| | | |_) | |  | | | | | (__| | |_) | (_| | |     │
+│     |_|  |_|\___|_| |_|\__,_| | .__/|_|  |_|_| |_|\___|_| .__/ \__,_|_|     │  
+│                               |_|                       |_|                 │
+├─────┬───────────────────────────────────────────────────────────────────────┤
+│  1  │                Crear un nuevo archivo de infracciones                 │
+├─────┼───────────────────────────────────────────────────────────────────────┤
+│  2  │        Listar las infracciones cercanas (1km) de los estadios         │
+├─────┼───────────────────────────────────────────────────────────────────────┤
+│  3  │                Listar las infracciones de microcentro                 │
+├─────┼───────────────────────────────────────────────────────────────────────┤
+│  4  │            Mostrar en pantalla lista de vehiculos robados             │
+├─────┼───────────────────────────────────────────────────────────────────────┤
+│  5  │       Mostrar informacion, foto y ubicacion a partir de dominio       │
+├─────┼───────────────────────────────────────────────────────────────────────┤
+│  6  │   Mostrar grafico de barras en base a los datos de las infracciones   │
+├─────┼───────────────────────────────────────────────────────────────────────┤
+│  7  │                                 Salir                                 │
+└─────┴───────────────────────────────────────────────────────────────────────┘
+''')
 def menu_principal(infracciones: list) -> None:
 
     # funcion que permite mostrar el menu principal y ejecutar las funciones correspondientes a cada opcion

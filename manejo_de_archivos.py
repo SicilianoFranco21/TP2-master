@@ -29,8 +29,11 @@ def leer_archivo_csv() -> list[dict]:
             ruta_foto: str = linea[4]
             descripcion: str = linea[5]
             ruta_audio: str = linea[6]
-            coordenadas: str = latitud + "," + longitud
-            direccion, localidad, provincia : str = obtener_direccion(coordenadas)
+            coordenadas: str = str(latitud + "," + longitud)
+            ubicacion : str = obtener_direccion(coordenadas)
+            direccion: str = ubicacion[0]
+            localidad: str = ubicacion[1]
+            provincia: str = ubicacion[2]
             patente: str = obtener_patente(ruta_foto)
             descripcion_audio: str = obtener_audio(ruta_audio)
             
