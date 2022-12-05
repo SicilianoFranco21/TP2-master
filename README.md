@@ -14,7 +14,7 @@ Una vez registrado, la misma provee un token para poder utilizar la API de detec
 - Reemplazar el token de `https://platerecognizer.com/` en el archivo `utils.py` (constante API_TOKEN)
 - Ejecutar el script principal: `python3 main.py`
 
-# Aclaraciones utiles:
+## Aclaraciones utiles:
 
 El programa utiliza la API de ALPR para el reconocimiento de placas. Esta pagina provee al usuario con un token, el cual le permite realizar 2500 llamados a dicha API. en caso de que el programa rompa antes de mostrar el menu principal, por favor verifique:
 - Haber instalado correctamente todas las dependencias
