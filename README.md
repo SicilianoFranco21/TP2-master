@@ -27,6 +27,7 @@ Dentro del repositorio, podremos encontrar los siguientes archivos y directorios
 
 ## Como correr el programa:
 
+- Clonar el repositorio `git clone https://github.com/SicilianoFranco21/TP2-master`
 - Instalar las dependencias: `pip install -r requisitos. txt`
 - Reemplazar el token de https://platerecognizer.com/ en el archivo `utils.py` (constante API_TOKEN)
 - Ejecutar el script principal: `python main.py`
