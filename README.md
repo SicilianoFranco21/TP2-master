@@ -15,12 +15,12 @@ Una vez registrado, la misma provee un token para poder utilizar la API de detec
 Dentro del repositorio, podremos encontrar los siguientes archivos y directorios:
 - `audios`, carpeta donde se almacenan los audios en formato.wav
 - `imgs`, carpeta donde se almacenan las imagenes del programa.
+- `prueba_lector_patentes`, carpeta donde se encuentran las fotos de prueba, el csv `prueba.csv` con las rutas de las fotos y el archivo `prueba.py` donde se testea el funcionamiento del lector de patentes.
 - `infracciones.csv`, archivo csv que se utiliza para crear una estructura de datos.
 - `README.md`, archivo de instrucciones y de informacion util.
 - `funciones.py`, archivo donde se almacenan las funciones correspondientes al desarrollo de los puntos del tp.
 - `main.py`, archivo principal del TP.
 - `manejo_de_archivos.py`, archivo que se encarga de interpretar los archivos con formato distinto a py. En este caso, este archivo es el encargado de leer `infracciones.csv` y `robados.txt` para su uso correcto en el programa y de crear el archivo `informe infracciones.csv` cuando el usuario asi lo solicite.
-- `prueba.py`, archivo donde se demuestra que el interprete de patentes devuelve patentes unicamente si este las detecta.
 - `requisitos.txt`, archivo donde se almacenan las dependencias del TP.
 - `robados.txt`, archivo que almacena una lista de patentes a ser utilizadas en uno de los puntos del TP.
 - `utils.py`, archivo donde se almacenan funciones utiles para facilitar el desarrollo del TP.
