@@ -17,6 +17,7 @@ def leer_archivo_csv() -> list[dict]:
     # timestamp, telefono, latitud, longitud, ruta_foto, descripcion_texto, ruta_audio, direccion, localidad, provincia, patente, descripcion_audio
 
     cls()
+    print("Por favor, espere mientras se carga el archivo...")
     infracciones: list = []
     with open('Infracciones.csv', 'r') as archivo_csv:
         lector = csv.reader(archivo_csv, delimiter=',')
