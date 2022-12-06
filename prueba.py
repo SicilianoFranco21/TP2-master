@@ -1,12 +1,20 @@
 # en este archivo se busca demostrar que el detector de patente funciona correctamente.
-
+import time
 from utils import *
 
-def main():
-    patente = obtener_patente('imgs/perro.jpg')
-    print(f'patente: {patente}')
+def lista_de_fotos() -> list[str]:
+    fotos: list[str] = []
+    with open("prueba.csv", "r") as archivo:
+        for linea in archivo:
+            fotos.append(linea.strip())
 
-    patente_2 = obtener_patente('imgs/000.png')
-    print(f'patente 2: {patente_2}')
+    return fotos
+
+
+def main() -> None:
+    fotos: list[str] = lista_de_fotos()
+    for foto in fotos:
+        time.sleep(1.5)
+        print(f"patente: {obtener_patente(foto)}")
 
 main()

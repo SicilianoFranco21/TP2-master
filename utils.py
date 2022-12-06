@@ -3,6 +3,7 @@ import requests
 from geopy.geocoders import Nominatim
 import speech_recognition as sr
 
+
 def cls() -> None:
     # funcion que permite limpiar la consola
     os.system('cls' if os.name=='nt' else 'clear')
