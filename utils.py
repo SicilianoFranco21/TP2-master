@@ -4,12 +4,12 @@ from geopy.geocoders import Nominatim
 import speech_recognition as sr
 
 
+API_TOKEN: str = 'Token 06314a64093e9225ccf62c5872988131c9c5909c'
+
+
 def cls() -> None:
     # funcion que permite limpiar la consola
     os.system('cls' if os.name=='nt' else 'clear')
-
-
-API_TOKEN: str = 'Token 06314a64093e9225ccf62c5872988131c9c5909c'
 
 
 def obtener_patente(ruta_foto: str) -> str:
